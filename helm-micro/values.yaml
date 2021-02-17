@@ -36,19 +36,6 @@ annotations: {}
 
 #ARGS:
 args:
-#  - "-p"
-#  - "4222"
-#  - "-m"
-#  - "8222"
-#  - "-hbi"
-#  - "5s"
-#  - "-hbt"
-#  - "5s"
-#  - "-hbf"
-#  - "2"
-#  - "-SD"
-#  - "-cid"
-#  - "ticketing"
 
 
 # List of services
@@ -77,22 +64,25 @@ initContainers:
   - name: download
     image: busybox
     command:
-        - "wget"
-        - "-O"
-        - "/data/ig.sql"
-        - "8222"
+      - "wget"
+      - "-O"
+      - "/personal/data/ig.sql"
+      - "https://raw.githubusercontent.com/darefalola7/practiseSQL/main/ig.sql"
     volumeMount:
-      name: pgadmin-pv-claim-volumne
-      mountPath: /pgadmin/data
+      name: pgadmin-pv-claim-volume
+      mountPath: /personal/data
 
 
 dbConfigMap: false
 eventConfigMap: false
 redisConfigMap: false
-fileConfigMap:
-  - name: sql_data
-    mountPath: /popdata/sql
-    volumeName: config
+#fileConfigMap:
+#  - name: sql_data
+#    mountPath: /popdata/sql
+#    volumeName: config
+
+#Remember
+#Default pgadmin storage location: /var/lib/pgadmin/storage/[username]
 
 volumes:
   enabled: true
@@ -100,7 +90,7 @@ volumes:
     enabled: true
     existing_claim:
     name: pgadmin-pv-claim
-    mountPath: /pgadmin/data
+    mountPath: /personal/data
     size: 4Gi
     class: hostpath
     accessModes:

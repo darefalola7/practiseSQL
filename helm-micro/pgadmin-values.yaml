@@ -36,19 +36,6 @@ annotations: {}
 
 #ARGS:
 args:
-#  - "-p"
-#  - "4222"
-#  - "-m"
-#  - "8222"
-#  - "-hbi"
-#  - "5s"
-#  - "-hbt"
-#  - "5s"
-#  - "-hbf"
-#  - "2"
-#  - "-SD"
-#  - "-cid"
-#  - "ticketing"
 
 
 # List of services
@@ -73,21 +60,34 @@ environment:
         name: postgres-secret
         key: pgadmin-password
 
+initContainers:
+  - name: download
+    image: busybox
+    command:
+      - "wget"
+      - "-O"
+      - "/pgadmin/data/ig.sql"
+      - "https://raw.githubusercontent.com/darefalola7/practiseSQL/main/ig.sql"
+    volumeMount:
+      name: pgadmin-pv-claim-volume
+      mountPath: /pgadmin/data
+
+
 dbConfigMap: false
 eventConfigMap: false
 redisConfigMap: false
-fileConfigMap:
-  - name: sql_data
-    mountPath: /popdata/sql
-    volumeName: config-volume
+#fileConfigMap:
+#  - name: sql_data
+#    mountPath: /popdata/sql
+#    volumeName: config
 
 volumes:
-  enabled: false
+  enabled: true
   pvc:
-    enabled: false
+    enabled: true
     existing_claim:
-    name: db-pv-claim
-    mountPath: /var/lib/postgresql/data
+    name: pgadmin-pv-claim
+    mountPath: /pgadmin/data
     size: 4Gi
     class: hostpath
     accessModes:
