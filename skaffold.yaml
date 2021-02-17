@@ -1,0 +1,13 @@
+apiVersion: skaffold/v2beta6
+kind: Config
+deploy:
+  helm:
+    releases:
+    - name: postgres
+      chartPath: .\helm-micro\
+      valuesFiles:
+        - .\helm-micro\postgress-values.yaml
+    - name: pg-admin
+      chartPath: .\helm-micro\
+      valuesFiles:
+        - .\helm-micro\pgadmin-values.yaml

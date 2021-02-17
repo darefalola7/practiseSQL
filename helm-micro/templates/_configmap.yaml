@@ -1,0 +1,18 @@
+{{- define "configmap"  -}}
+{{- if .Values.volumes.configMaps }}
+{{ range $cm := .Values.volumes.configMaps}}
+{{- if $cm.data }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $cm.name }}
+  {{- template "cfgannots" }}
+data:
+  {{- range $filename, $content := $cm.data }}
+  # property-like keys; each key maps to a simple value
+  {{ $filename }}: {{ $content }}
+  {{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end -}}

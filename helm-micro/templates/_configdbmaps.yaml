@@ -1,0 +1,13 @@
+{{- define "dbconfigmap"  -}}
+{{- if .Values.dbConfigMap }}
+{{ $name := $.Release.Name }}
+{{ $service := (first .Values.services) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-configmap
+  {{- template "cfgannots" }}
+data:
+  database_url: mongodb://{{ include "microservice.fullname" . }}-svc-{{ $service.name }}:27017/{{ $.Release.Name | trunc (sub (len $name) 6 | int) }}
+{{- end }}
+{{- end }}

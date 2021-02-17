@@ -1,0 +1,120 @@
+---
+# Default values for microservice.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+global:
+  replicaCount: 1
+  environment:
+  # list of key: value
+  # GLOBAL1: value
+
+## Set default image, imageTag, and imagePullPolicy.
+## ref: https://hub.docker.com/r/apache/nifi/
+##
+
+
+image: postgres
+imageConfig:
+  repository:
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+#command: ['echo pre-install Job Pod is Running']
+
+replicaCount: 1
+
+# command: ["/bin/sh","-c"]
+# args: ["echo 'consuming a message'; sleep 5"]
+
+nameOverride: database
+fullnameOverride: ""
+
+
+# Annotation for the Deployment
+annotations: {}
+
+#ARGS:
+args:
+#  - "-p"
+#  - "4222"
+#  - "-m"
+#  - "8222"
+#  - "-hbi"
+#  - "5s"
+#  - "-hbt"
+#  - "5s"
+#  - "-hbf"
+#  - "2"
+#  - "-SD"
+#  - "-cid"
+#  - "ticketing"
+
+
+# List of services
+services:
+  - name: web
+    type: ClusterIP
+    annotations: {}
+    specs:
+      - port: 5432
+        targetPort: 5432
+        name: postgres-svc
+
+environment:
+  - name: POSTGRES_USER
+    valueFrom:
+      secretKeyRef:
+        name: postgres-secret
+        key: pg-root-username
+  - name: POSTGRES_DB
+    valueFrom:
+      secretKeyRef:
+        name: postgres-secret
+        key: pg-db
+  - name: POSTGRES_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: postgres-secret
+        key: pgadmin-password
+  - name: PGDATA
+    value: /var/lib/postgresql/data/pgdata
+
+dbConfigMap: false
+eventConfigMap: false
+redisConfigMap: false
+
+volumes:
+  enabled: true
+  pvc:
+    enabled: true
+    existing_claim: false
+    name: db-pv-claim
+    mountPath: /var/lib/postgresql/data
+    size: 4Gi
+    class: hostpath
+    accessModes:
+      - ReadWriteOnce
+
+  configMaps:
+#    - name: test
+#      mountPath: /test
+#      data:
+#        test.conf: |
+#          hello
+
+## Configure Ingress based on the documentation here: https://kubernetes.io/docs/concepts/services-networking/ingress/
+##
+ingress:
+  enabled: false
+
+## Configure resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+##
+resources:
+  limits:
+    cpu: 2
+    memory: 2000Mi
+  requests:
+    cpu: 500m
+    memory: 500Mi
