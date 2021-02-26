@@ -5,7 +5,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  {{- template "cfgannots" }}
+  {{- template "pvcannots" }}
   name: {{ .Values.volumes.pvc.name }}
 spec:
   {{- if .Values.volumes.pvc.class }}

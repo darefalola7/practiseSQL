@@ -46,6 +46,13 @@ services:
       - port: 5432
         targetPort: 5432
         name: postgres-svc
+  - name: external
+    type: NodePort
+    annotations: {}
+    specs:
+      - port: 1234
+        targetPort: 5432
+        name: pgexternal-svc
 
 environment:
   - name: POSTGRES_USER
@@ -74,7 +81,7 @@ volumes:
   enabled: true
   pvc:
     enabled: true
-    existing_claim: false
+    existing_claim: db-pv-claim
     name: db-pv-claim
     mountPath: /var/lib/postgresql/data
     size: 4Gi

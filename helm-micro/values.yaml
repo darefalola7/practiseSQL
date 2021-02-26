@@ -61,16 +61,16 @@ environment:
         key: pgadmin-password
 
 initContainers:
-  - name: download
-    image: busybox
-    command:
-      - "wget"
-      - "-O"
-      - "/personal/data/ig.sql"
-      - "https://raw.githubusercontent.com/darefalola7/practiseSQL/main/ig.sql"
-    volumeMount:
-      name: pgadmin-pv-claim-volume
-      mountPath: /personal/data
+#  - name: download
+#    image: busybox
+#    command:
+#      - "wget"
+#      - "-O"
+#      - "/var/lib/pgadmin/ig.sql"
+#      - "https://raw.githubusercontent.com/darefalola7/practiseSQL/main/ig.sql"
+#    volumeMount:
+#      name: pgadmin-pv-claim-volume
+#      mountPath: /var/lib/pgadmin
 
 
 dbConfigMap: false
@@ -81,16 +81,13 @@ redisConfigMap: false
 #    mountPath: /popdata/sql
 #    volumeName: config
 
-#Remember
-#Default pgadmin storage location: /var/lib/pgadmin/storage/[username]
-
 volumes:
   enabled: true
   pvc:
     enabled: true
     existing_claim:
     name: pgadmin-pv-claim
-    mountPath: /personal/data
+    mountPath: /var/lib/pgadmin
     size: 4Gi
     class: hostpath
     accessModes:

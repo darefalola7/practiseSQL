@@ -50,6 +50,13 @@ Create chart name and version as used by the chart label.
 {{- end -}}
 {{/*    "helm.sh/hook-delete-policy": hook-succeeded*/}}
 
+{{- define "pvcannots" }}
+  annotations:
+   "helm.sh/hook": pre-install
+   "helm.sh/hook-weight": "-1"
+   "helm.sh/resource-policy": keep
+{{- end -}}
+
 {{- define "env-vars" }}
 env:
   - name: var1

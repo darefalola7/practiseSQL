@@ -14,7 +14,7 @@ global:
 ##
 
 
-image: dpage/pgadmin4
+image: dpage/pgadmin4:latest
 imageConfig:
   repository:
   tag: "latest"
@@ -61,16 +61,16 @@ environment:
         key: pgadmin-password
 
 initContainers:
-  - name: download
-    image: busybox
-    command:
-      - "wget"
-      - "-O"
-      - "/pgadmin/data/ig.sql"
-      - "https://raw.githubusercontent.com/darefalola7/practiseSQL/main/ig.sql"
-    volumeMount:
-      name: pgadmin-pv-claim-volume
-      mountPath: /pgadmin/data
+#  - name: download
+#    image: busybox
+#    command:
+#      - "wget"
+#      - "-O"
+#      - "/var/lib/pgadmin/ig.sql"
+#      - "https://raw.githubusercontent.com/darefalola7/practiseSQL/main/ig.sql"
+#    volumeMount:
+#      name: pgadmin-pv-claim-volume
+#      mountPath: /var/lib/pgadmin
 
 
 dbConfigMap: false
@@ -87,7 +87,7 @@ volumes:
     enabled: true
     existing_claim:
     name: pgadmin-pv-claim
-    mountPath: /pgadmin/data
+    mountPath: /var/lib/pgadmin
     size: 4Gi
     class: hostpath
     accessModes:
